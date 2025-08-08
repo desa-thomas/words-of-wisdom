@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Quote } from "lucide-react";
+import { Quote, Truck } from "lucide-react";
+
+import { fetchdata } from "./api";
 
 const test_quote =
   " A Powerful Quote of the Day to Keep You Inspired. Navigate life's twists and challenges with the inspiration of a powerful Quote of the Day. Each morning, a carefully chosen quote can shift your mindset, providing motivation, wisdom, and a positive outlook. More than mere words, these quotes inspire dreams, challenge perspectives, and drive success. Cultivating a daily habit of reading an impactful Quotes of the Day can be a simple yet profound step towards personal growth and achievement. Embrace a new perspective today!";
 
+/** Todays formatted date */
 const today = new Date();
-
 const formatter = new Intl.DateTimeFormat("en-US", {
   weekday: "long", // "Thursday"
   month: "short", // "Aug"
@@ -20,19 +22,30 @@ function Page() {
    * Main page component. Will contain entire application
    */
 
-  //Get correct proxy url based on environment variable
-  const proxy_url = import.meta.env.VITE_PROXY_URL;
-
+  //State variables
   const [loading, setLoading] = useState(true);
   const [quoteofday, setQuoteofday] = useState(null);
   const [quotes, setQuotes] = useState(null);
 
-  /** Hook to get API data */
 
+  //Hook to get API data 
+  //TODO
   useEffect(() => {
 
+	//check localStorage
+	//if there is data, or the data is outdated
+	//get updated data from api (fetchdata from api.js)
+	//update loading state accordingly
 
+	setLoading(true); 
+	fetchdata("quoteofday").then(json =>{
+		if(json)
+		{
+			console.log(json)
+		}
+	}); 
   }, []);
+
 
   return (
     <div className="flex flex-col items-center w-screen h-screen bg-bgprimary justify-between">
