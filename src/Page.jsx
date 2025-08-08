@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Calendar, Quote, Truck } from "lucide-react";
 
-import { fetchall } from "./api";
+import { fetchQuoteofday, fetchQuotes } from "./api";
 
 /** Todays date formatted */
 const today = new Date();
@@ -20,7 +20,7 @@ const formatted_day = formatter.format(today);
  */
 function Page() {
   //State variables
-  const [loading, setLoading] = useState(true);
+  const [loadingPage, setLoadingPage] = useState(true);
 
   const [quoteofday, setQuoteofday] = useState(null);
   const [quotes, setQuotes] = useState(null);
@@ -29,9 +29,10 @@ function Page() {
 
   //Hook to get API data
   useEffect(() => {
-    setLoading(true);
+    setLoadingPage(true);
     console.log("loading..");
-    fetchall(setQuotes, setQuoteofday, setQuotesIndex);
+	fetchQuoteofday(setQuoteofday);
+	fetchQuotes(setQuotes, setQuotesIndex); 
   }, []);
 
   //Hook used when data is loaded
@@ -40,7 +41,7 @@ function Page() {
       console.log("data loaded:");
       console.log(quotes);
       console.log(quoteofday);
-      setLoading(false);
+      setLoadingPage(false);
     }
   }, [quotes, quoteofday]);
 
@@ -49,7 +50,7 @@ function Page() {
 	
   }
 
-  if (loading)
+  if (loadingPage)
     return (
       <div className="flex w-screen h-screen bg-bgprimary items-center justify-center">
         <p>loading...</p>
