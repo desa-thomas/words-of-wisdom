@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@theme
+{
+    --color-bgprimary: black; 
+    --color-bgsecondary: grey; 
+
+    --color-borderprimary: grey; 
+    --color-primary: purple;
+    --color-accent: green; 
+
+}
 
 html 
 {
@@ -8,7 +18,8 @@ html
 
 * 
 {
-    padding: 0px; 
-    margin: 0px; 
+    /* padding: 0px; 
+    margin: 0px;  */
     box-sizing: border-box;
 }
+
