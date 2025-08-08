@@ -29,6 +29,7 @@ export async function fetchQuotes(setQuotes, setQuotesIndex) {
       setQuotesIndex(0);
       localStorage.setItem("quotes_json", JSON.stringify(quotes_json));
       localStorage.setItem("index", 0);
+    
     } else {
       setQuotes([{ q: "Trouble fetching random quote :/. Try again later" }]);
       setQuotesIndex(0);

@@ -21,33 +21,66 @@ const formatted_day = formatter.format(today);
 function Page() {
   //State variables
   const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingQuote, setLoadingQuote] = useState(false);
 
   const [quoteofday, setQuoteofday] = useState(null);
   const [quotes, setQuotes] = useState(null);
   const [quotesIndex, setQuotesIndex] = useState(0); // index for random quotes arr
-  const [displayQuote, setDisplayQuote] = useState(null); 
+
+  const [isQuoteofday, setIsQuoteofday] = useState(true); //True if displaying quote of day, false if displaying random quote
 
   //Hook to get API data
   useEffect(() => {
     setLoadingPage(true);
     console.log("loading..");
-	fetchQuoteofday(setQuoteofday);
-	fetchQuotes(setQuotes, setQuotesIndex); 
+    fetchQuoteofday(setQuoteofday);
+    fetchQuotes(setQuotes, setQuotesIndex);
   }, []);
 
   //Hook used when data is loaded
   useEffect(() => {
     if (quotes && quoteofday) {
-      console.log("data loaded:");
-      console.log(quotes);
-      console.log(quoteofday);
       setLoadingPage(false);
     }
   }, [quotes, quoteofday]);
 
-  const randomButton = ()=>
-  {
+  //When quotes are done loading. (targets if 'quotes' was refetched)
+  useEffect(() => {
+    if (loadingQuote && quotes && quotes.length > 0) {
+      console.log("'quotes' loaded");
+      setLoadingQuote(false);
+    }
+  }, [quotes]);
+
+  //Only update localStorage index AFTERRRRRR quotesIndex state is updated
+  useEffect(()=> {
+	localStorage.setItem("index", quotesIndex);
+
+	//check this after setting local storage becuase function checks local storage 
+	if(quotes && quotesIndex >= quotes.length)
+	{
+		fetchQuotes(setQuotes, setQuotesIndex); 
+	}
 	
+  }, [quotesIndex])
+
+  
+  //button handler for random
+  const randomButton = async () => {
+    console.log("loading 'quotes'");
+    setLoadingQuote(true);
+
+    //Switch to show random quote
+    if (isQuoteofday) 
+		setIsQuoteofday(false);
+	
+    //only increment index if already showing random quote
+    else 
+		setQuotesIndex(Number(quotesIndex) + 1);
+  };
+
+  const todayButton = async () => {
+	setIsQuoteofday(true); 
   }
 
   if (loadingPage)
@@ -66,15 +99,16 @@ function Page() {
           </div>
 
           <QuoteCard
-            quote={quoteofday?.q}
-            author={quoteofday?.a}
-            isquoteofday={true}
+            quote={isQuoteofday ? quoteofday?.q : quotes[quotesIndex]?.q}
+            author={isQuoteofday ? quoteofday?.a : quotes[quotesIndex]?.a}
+			isQuoteofday={isQuoteofday}
+			loadingQuote={loadingQuote}
           />
 
           {/* Buttons  */}
           <div className="flex gap-5 w-full max-w-lg justify-center">
-            <Button text="Today's Wisdom" onclick={() => console.log("bruh")} />
-            <Button text="Random" onclick={() => console.log("bruh")} />
+            <Button text="Today's Wisdom" onclick={() => todayButton()} />
+            <Button text="Random Wisdom" onclick={() => randomButton()} />
           </div>
         </div>
 
@@ -93,7 +127,7 @@ function Page() {
 
 export default Page;
 
-function QuoteCard({ quote, author, isquoteofday }) {
+function QuoteCard({ quote, author, isQuoteofday}) {
   /**
    * Create Quote card component
    * quote 		- quote text
@@ -102,12 +136,14 @@ function QuoteCard({ quote, author, isquoteofday }) {
    */
   return (
     <div className="flex flex-col w-full items-center max-w-5xl gap-2">
-      
-	  {/* Today's Wisdom or Random Wisdom */}
-      {isquoteofday && <div className="self-start  items-end gap-2">
-		<h1 className="text-2xl"> Today's Wisdom </h1>
-		<div className="flex gap-2"><Calendar/>{formatted_day}</div></div>}
-
+      {/* Today's Wisdom or Random Wisdom */}
+      <div className="self-start  items-end gap-2">
+        <h1 className="text-2xl"> {isQuoteofday ? "Today's Wisdom" : "Random Wisdom"} </h1>
+        {isQuoteofday && <div className="flex gap-2">
+          <Calendar />
+          {formatted_day}
+        </div>}
+      </div>
 
       <div className="flex flex-col p-6 gap-5 border border-borderprimary border-sm w-full rounded-lg">
         <div className="flex flex-col ">
