@@ -13,6 +13,7 @@
 html 
 {
     display: flex;
+    background-color: var(--color-bgprimary);
     color: white; 
 }
 

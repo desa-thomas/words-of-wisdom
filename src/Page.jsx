@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { Quote, Truck } from "lucide-react";
+import { Calendar, Quote, Truck } from "lucide-react";
 
-import { fetchdata } from "./api";
+import { fetchall } from "./api";
 
-const test_quote =
-  " A Powerful Quote of the Day to Keep You Inspired. Navigate life's twists and challenges with the inspiration of a powerful Quote of the Day. Each morning, a carefully chosen quote can shift your mindset, providing motivation, wisdom, and a positive outlook. More than mere words, these quotes inspire dreams, challenge perspectives, and drive success. Cultivating a daily habit of reading an impactful Quotes of the Day can be a simple yet profound step towards personal growth and achievement. Embrace a new perspective today!";
-
-/** Todays formatted date */
+/** Todays date formatted */
 const today = new Date();
 const formatter = new Intl.DateTimeFormat("en-US", {
   weekday: "long", // "Thursday"
@@ -14,72 +11,83 @@ const formatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric", // 7
   year: "numeric", // 2025
 });
-
 const formatted_day = formatter.format(today);
 
+/**
+ * Main page component
+ *
+ * @return {*}
+ */
 function Page() {
-  /**
-   * Main page component. Will contain entire application
-   */
-
   //State variables
   const [loading, setLoading] = useState(true);
+
   const [quoteofday, setQuoteofday] = useState(null);
   const [quotes, setQuotes] = useState(null);
+  const [quotesIndex, setQuotesIndex] = useState(0); // index for random quotes arr
+  const [displayQuote, setDisplayQuote] = useState(null); 
 
-
-  //Hook to get API data 
-  //TODO
+  //Hook to get API data
   useEffect(() => {
-
-	//check localStorage
-	//if there is data, or the data is outdated
-	//get updated data from api (fetchdata from api.js)
-	//update loading state accordingly
-
-	setLoading(true); 
-	fetchdata("quoteofday").then(json =>{
-		if(json)
-		{
-			console.log(json)
-		}
-	}); 
+    setLoading(true);
+    console.log("loading..");
+    fetchall(setQuotes, setQuoteofday, setQuotesIndex);
   }, []);
 
+  //Hook used when data is loaded
+  useEffect(() => {
+    if (quotes && quoteofday) {
+      console.log("data loaded:");
+      console.log(quotes);
+      console.log(quoteofday);
+      setLoading(false);
+    }
+  }, [quotes, quoteofday]);
 
-  return (
-    <div className="flex flex-col items-center w-screen h-screen bg-bgprimary justify-between">
-      <div className="flex flex-col gap-10 items-center justify-center px-10 gap-5 h-full">
-        {/* Title and date */}
-        <div className="flex flex-col items-center">
-          <h1 className="text-5xl font-semibold">Words of Wisdom</h1>
-          <p>{formatted_day}</p>
-        </div>
+  const randomButton = ()=>
+  {
+	
+  }
 
-        <QuoteCard
-          quote={test_quote}
-          author={"A wise man"}
-          isquoteofday={true}
-        />
-
-        {/* Buttons  */}
-        <div className="flex gap-5 w-full max-w-lg justify-center">
-          <Button text="Today's Wisdom" onclick={() => console.log("bruh")} />
-          <Button text="Random" onclick={() => console.log("bruh")} />
-        </div>
+  if (loading)
+    return (
+      <div className="flex w-screen h-screen bg-bgprimary items-center justify-center">
+        <p>loading...</p>
       </div>
+    );
+  else
+    return (
+      <div className="flex flex-col items-center w-screen h-screen bg-bgprimary justify-between">
+        <div className="flex flex-col gap-10 items-center justify-center px-10 gap-5 h-full w-full">
+          {/* Title and date */}
+          <div className="flex flex-col items-center">
+            <h1 className="text-5xl font-semibold">Words of Wisdom</h1>
+          </div>
 
-      <footer className="w-full bg-bgprimary flex flex-col p-5 border-t-1 border-borderprimary">
-        <p>{"Developed with <3"}</p>
-        <p className="text-sm">
-          Wisdom generously provided by{" "}
-          <a href="https://zenquotes.io/" target="_blank">
-            ZenQuotes API
-          </a>
-        </p>
-      </footer>
-    </div>
-  );
+          <QuoteCard
+            quote={quoteofday?.q}
+            author={quoteofday?.a}
+            isquoteofday={true}
+          />
+
+          {/* Buttons  */}
+          <div className="flex gap-5 w-full max-w-lg justify-center">
+            <Button text="Today's Wisdom" onclick={() => console.log("bruh")} />
+            <Button text="Random" onclick={() => console.log("bruh")} />
+          </div>
+        </div>
+
+        <footer className="w-full bg-bgprimary flex flex-col p-5 border-t-1 border-borderprimary">
+          <p>{"Developed with <3"}</p>
+          <p className="text-sm">
+            Wisdom generously provided by{" "}
+            <a href="https://zenquotes.io/" target="_blank">
+              ZenQuotes API
+            </a>
+          </p>
+        </footer>
+      </div>
+    );
 }
 
 export default Page;
@@ -92,22 +100,28 @@ function QuoteCard({ quote, author, isquoteofday }) {
    * isquoteofday 	- bool, whether it is the quote of day
    */
   return (
-    <div className="flex flex-col p-6 gap-5 border border-borderprimary border-sm w-full max-w-5xl rounded-lg">
-      {/* Quote of the day title if it is the quote of the day */}
-      {isquoteofday && <h1 className="text-3xl font-medium"> Quote of day</h1>}
+    <div className="flex flex-col w-full items-center max-w-5xl gap-2">
+      
+	  {/* Today's Wisdom or Random Wisdom */}
+      {isquoteofday && <div className="self-start  items-end gap-2">
+		<h1 className="text-2xl"> Today's Wisdom </h1>
+		<div className="flex gap-2"><Calendar/>{formatted_day}</div></div>}
 
-      <div className="flex flex-col gap-1">
-        {/* Quote icon with the actual quote text */}
-        <div className="flex gap-3 items-center">
-          <div className="self-start w-max h-max">
-            <Quote size={32} />
+
+      <div className="flex flex-col p-6 gap-5 border border-borderprimary border-sm w-full rounded-lg">
+        <div className="flex flex-col ">
+          {/* Quote icon with the actual quote text */}
+          <div className="flex gap-3 items-center">
+            <div className="self-start w-max h-max">
+              <Quote size={32} />
+            </div>
+            <div className="w-full">
+              <p className="text-xl w-full">{quote}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-xl w-full">{quote}</p>
-          </div>
+          {/* author, align it at the end  */}
+          <p className="italic self-end"> - {author} </p>
         </div>
-        {/* author, align it at the end  */}
-        <p className="italic self-end"> - {author} </p>
       </div>
     </div>
   );
