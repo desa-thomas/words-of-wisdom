@@ -20,36 +20,18 @@ function Page() {
    * Main page component. Will contain entire application
    */
 
+  //Get correct proxy url based on environment variable
+  const proxy_url = import.meta.env.VITE_PROXY_URL;
+
   const [loading, setLoading] = useState(true);
-  const [date, setDate] = useState(null);
+  const [quoteofday, setQuoteofday] = useState(null);
+  const [quotes, setQuotes] = useState(null);
 
- /** Hook to get API data */
+  /** Hook to get API data */
+
   useEffect(() => {
-    const fetchdata = async (url) => {
-      /** Fetch data from API url */
-      try {
-        const res = await fetch(url);
 
-        if (!res.ok) {
-          throw new Error(`Error: Status ${res.status}`);
-        }
 
-        const json = await res.json();
-        console.lod(`${res.status}: ${json}`);
-      } catch (error) {
-        console.error(error.message);
-        return null;
-      }
-      return json;
-    };
-
-    const quoteofday = localStorage.getItem("quoteofday", null);
-    const quotes = localStorage.getItem("quotes", null);
-
-    if (quoteofday == null) {
-      const json = fetchdata(quoteofdayURL);
-      localStorage;
-    }
   }, []);
 
   return (
@@ -76,7 +58,12 @@ function Page() {
 
       <footer className="w-full bg-bgprimary flex flex-col p-5 border-t-1 border-borderprimary">
         <p>{"Developed with <3"}</p>
-		<p className="text-sm">Wisdom generously provided by <a href="https://zenquotes.io/" target="_blank">ZenQuotes API</a></p>
+        <p className="text-sm">
+          Wisdom generously provided by{" "}
+          <a href="https://zenquotes.io/" target="_blank">
+            ZenQuotes API
+          </a>
+        </p>
       </footer>
     </div>
   );
