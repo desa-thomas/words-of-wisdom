@@ -4,7 +4,7 @@
  */
 
 //change this when server is hosted elsewhere
-const proxy_url = "http://localhost:3000";
+const proxy_url = "http://tomsapi.duckdns.org:1984";
 
 
 /**
@@ -31,7 +31,7 @@ export async function fetchQuotes(setQuotes, setQuotesIndex) {
       localStorage.setItem("index", 0);
     
     } else {
-      setQuotes([{ q: "Trouble fetching random quote :/. Try again later" }]);
+      setQuotes([{ q: "Trouble fetching random wisdom. Try again later", a: "Fly on the wall" }]);
       setQuotesIndex(0);
     }
   }
@@ -76,7 +76,7 @@ export async function fetchQuoteofday(setQuoteofday) {
     //Problem fetching quote
     else
       setQuoteofday({
-        q: "Trouble fetching quote of day. Try again later",
+        q: "Trouble fetching today's wisdom. Try again later",
         a: "fly on the wall",
       });
   }

@@ -1,12 +1,17 @@
 @import "tailwindcss";
 @theme
 {
-    --color-bgprimary: black; 
-    --color-bgsecondary: grey; 
+    --color-bgprimary: #242423; 
+    --color-bgsecondary: #1c1c1c; 
 
-    --color-borderprimary: grey; 
-    --color-primary: purple;
-    --color-accent: green; 
+    --color-primaryfont: #F1DAC4;
+    --color-secondaryfont: black; 
+
+    --color-borderprimary: #323030; 
+
+    --color-primary: #966B9D;
+    --color-accent: #966B9D;
+    --color-secondary: #228CDB; 
 
 }
 
@@ -14,7 +19,7 @@ html
 {
     display: flex;
     background-color: var(--color-bgprimary);
-    color: white; 
+    color: var(--color-primaryfont); 
 }
 
 * 
@@ -24,3 +29,38 @@ html
     box-sizing: border-box;
 }
 
+/* Smooth color animations for the buttons */
+button{
+    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: opacity 0.5s ease, color 0.3s ease;
+}
+
+/* Animation for "loading quotes" */
+.blinking-text {
+  animation-name: blink-text;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes blink-text {
+  0%, 20% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Gradient for Title */
+.gradient-text {
+  background: linear-gradient(90deg, var(--color-accent), var(--color-primaryfont));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: bold;
+}
