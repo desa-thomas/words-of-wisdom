@@ -4,7 +4,7 @@
  */
 
 //change this when server is hosted elsewhere
-const proxy_url = "http://tomsapi.duckdns.org:1984";
+const proxy_url = "https://tomsapi.duckdns.org:1984";
 
 
 /**
