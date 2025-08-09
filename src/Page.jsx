@@ -100,13 +100,13 @@ function Page() {
           <Button
             text="Today's Wisdom"
             onclick={() => todayButton()}
-            isQuoteofday={isQuoteofday}
+            toggle={isQuoteofday}
             loadingQuote={loadingQuote}
           />
           <Button
             text="Random Wisdom"
             onclick={() => randomButton()}
-            isQuoteofday={false}
+            toggle={!isQuoteofday}
             loadingQuote={loadingQuote}
           />
         </div>
@@ -185,13 +185,13 @@ function QuoteCard({ quote, author, isQuoteofday, loadingQuote }) {
   );
 }
 
-function Button({ text, onclick, isQuoteofday, loadingQuote }) {
+function Button({ text, onclick, toggle, loadingQuote }) {
   return (
     <button
       disabled={loadingQuote}
       className={`border border-accent px-4 py-1 rounded-xl w-full disabled:opacity-30 ${
-        !loadingQuote ? "hover:bg-accent" : ""
-      } ${isQuoteofday ? " bg-accent" : ""}`}
+        !loadingQuote ? "hover:bg-accent hover:brightness-80" : ""
+      } ${toggle ? " bg-accent" : ""}`}
       onClick={onclick}
     >
       {text}
