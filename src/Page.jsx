@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Calendar, Quote, Truck } from "lucide-react";
 
 import { fetchQuoteofday, fetchQuotes } from "./api";
+import { SiGithub } from "react-icons/si";
 
 /** Todays date formatted */
 const today = new Date();
@@ -36,7 +37,7 @@ function Page() {
 
     fetchQuoteofday(setQuoteofday);
     fetchQuotes(setQuotes, setQuotesIndex);
-	  }, []);
+  }, []);
 
   //Hook used when data is loaded
   useEffect(() => {
@@ -112,20 +113,25 @@ function Page() {
         </div>
       </div>
 
-      <footer className="w-full bg-bgsecondary flex flex-col p-5 border-t-1 border-borderprimary">
-        <p>
-          Developed with <span className="text-red-600">{"<3"}</span>
-        </p>
-        <p className="text-sm">
-          Wisdom generously provided by{" "}
-          <a
-            className="hover:underline hover:text-primary decoration-accent"
-            href="https://zenquotes.io/"
-            target="_blank"
-          >
-            ZenQuotes API
-          </a>
-        </p>
+      <footer className="w-full bg-bgsecondary flex justify-between items-center p-5 border-t-1 border-borderprimary">
+        <div>
+          <p>
+            Developed with <span className="text-red-600">{"<3"}</span>
+          </p>
+          <p className="text-sm">
+            Wisdom generously provided by{" "}
+            <a
+              className="hover:underline hover:text-primary decoration-accent"
+              href="https://zenquotes.io/"
+              target="_blank"
+            >
+              ZenQuotes API
+            </a>
+          </p>
+        </div>
+        <div>
+          <a href="https://github.com/desa-thomas/words-of-wisdom" target="_blank"><SiGithub size={24} className="hover:fill-primary"/></a>
+        </div>
       </footer>
     </div>
   );
